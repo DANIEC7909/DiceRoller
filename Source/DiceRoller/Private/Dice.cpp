@@ -38,14 +38,16 @@ int32 ADice::EvaluateScore()
 		if (dp.IsValid())
 		{
 			float f=FVector::DotProduct(dp->GetUpVector(),FVector::UpVector);
-			if ( dot>f && (f>0.95f))
+		
+			if ( dot>f && (f>DETECTION_TRESHOLD))
 			{
 				dot = f;
 				detPoint = dp;
 			}
-			UE_LOGFMT(LogTemp,Display,"{0}<=|=>{1}",f,dp->GetValue());
+		//	UE_LOGFMT(LogTemp,Display,"{0}<=|=>{1}",f,dp->GetValue());
 		}
 	}
+		if (detPoint.IsValid())
 			UE_LOGFMT(LogTemp,Display,"dot is:{0} dNum is:{1}",dot,detPoint->GetValue());
 	return 0;
 }

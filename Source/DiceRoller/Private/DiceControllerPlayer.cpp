@@ -49,5 +49,15 @@ void ADiceControllerPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	this->AddActorWorldRotation(FRotator(0,DeltaTime*10,0));
+	for (TWeakObjectPtr<ADice> dice : CurrentDices)
+	{
+		if (dice.IsValid())
+		{
+			if (dice->IsDiceSettled())
+			{
+				dice->EvaluateScore();
+			}
+		}
+	}
 }
 
