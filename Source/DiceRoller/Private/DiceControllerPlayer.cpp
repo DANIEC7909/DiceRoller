@@ -9,6 +9,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Camera/CameraComponent.h"
 
 ADiceControllerPlayer::ADiceControllerPlayer()
 {
@@ -25,9 +26,12 @@ void ADiceControllerPlayer::TriggerCurrentDices(const FInputActionValue& InputAc
 
 void ADiceControllerPlayer::DeckApplied()
 {
-	for (TWeakObjectPtr<ADice> dice :CurrentDices)
+	for (TWeakObjectPtr<ADice> dice : CurrentDices)
 	{
-		dice->Destroy();
+		if (dice.IsValid())
+		{
+			dice->Destroy();
+		}
 	}
 	CurrentDices.Empty();
 	for (TSubclassOf<ADice>diceSub:DiceScheme)
@@ -60,6 +64,7 @@ void ADiceControllerPlayer::BeginPlay()
 			EnhancedInput->BindAction(InputActionGuess, ETriggerEvent::Started, this, &ADice::Guess);
 		}*/
 	}
+	camComp = GetComponentByClass<UCameraComponent>();
 }
 void ADiceControllerPlayer::AddDiceToScheme(EDiceType dType)
 {
@@ -87,6 +92,11 @@ void ADiceControllerPlayer::Tick(float DeltaTime)
 			if (dice->IsDiceSettled())
 			{
 				dice->EvaluateScore();
+				dice->PointWidgetTowardCamera(camComp->GetComponentLocation());
+			}
+			else
+			{
+				dice->HideDiceHUD();
 			}
 		}
 	}

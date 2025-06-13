@@ -7,7 +7,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "DetectionPoint.h"
+#include "MyUserWidget.h"
 #include "Chaos/Utilities.h"
+#include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Logging/StructuredLog.h"
 
@@ -47,8 +49,16 @@ int32 ADice::EvaluateScore()
 		//	UE_LOGFMT(LogTemp,Display,"{0}<=|=>{1}",f,dp->GetValue());
 		}
 	}
+	if (IsValid(diceHUD) && detPoint.IsValid())
+	{
+		diceHUD->ShowTEXT(detPoint->GetValue());
+	}
 		if (detPoint.IsValid())
+		{
+			wComp->SetWorldLocation(detPoint->GetComponentLocation()+FVector(0,0,50));
 			UE_LOGFMT(LogTemp,Display,"dot is:{0} dNum is:{1}",dot,detPoint->GetValue());
+			return detPoint->GetValue();
+		}
 	return 0;
 }
 
@@ -56,14 +66,15 @@ ADice::ADice()
 {
 	GetStaticMeshComponent()->SetSimulatePhysics(true);
 }
-void ADice::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
-}
 void ADice::BeginPlay()
 {
 	Super::BeginPlay();
+	wComp=GetComponentByClass<UWidgetComponent>();
+	if (wComp)
+	{
+		diceHUD=Cast<UMyUserWidget>(wComp->GetWidget());
+	}
 }
 
 

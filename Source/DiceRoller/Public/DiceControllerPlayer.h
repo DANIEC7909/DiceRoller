@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "DiceStatics.h"
 #include "InputActionValue.h"
+#include "Camera/CameraComponent.h"
 #include "GameFramework/Pawn.h"
 #include "DiceControllerPlayer.generated.h"
 
@@ -30,7 +31,9 @@ private:
 	TSubclassOf<ADice> D6BP;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ADice> D20BP;
-	
+	UPROPERTY()
+	UCameraComponent* camComp;
+
 #pragma endregion
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
@@ -39,6 +42,7 @@ public:
 	ADiceControllerPlayer();
 
 protected:
+	UFUNCTION(BlueprintCallable)
 	void TriggerCurrentDices(const FInputActionValue& InputActionValue);
 	UFUNCTION()
 	void DeckApplied();
