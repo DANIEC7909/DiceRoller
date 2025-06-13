@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DiceStatics.h"
 #include "InputActionValue.h"
 #include "GameFramework/Pawn.h"
 #include "DiceControllerPlayer.generated.h"
 
+enum class EDiceType : uint8;
 class UInputMappingContext;
 class UInputAction;
 class ADice;
@@ -23,14 +25,43 @@ private:
 	UInputAction* InputActionGuess;
 	UPROPERTY(EditAnywhere)
 	TArray<TWeakObjectPtr<ADice>> CurrentDices;
+#pragma region BP_REFERENCES
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ADice> D6BP;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ADice> D20BP;
+	
+#pragma endregion
+public:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TArray<TSubclassOf<ADice>> DiceScheme;
 public:
 	ADiceControllerPlayer();
 
 protected:
 	void TriggerCurrentDices(const FInputActionValue& InputActionValue);
+	UFUNCTION()
+	void DeckApplied();
 	virtual void BeginPlay() override;
+	
+	virtual void PostInitializeComponents() override;
 
-public:	
+public:
+	UFUNCTION(BlueprintCallable)
+	void AddDiceToScheme(EDiceType dType);
+	UFUNCTION(BlueprintCallable)
+	void RemoveDiceFromScheme(EDiceType dType);
 	virtual void Tick(float DeltaTime) override;
-
+	UFUNCTION(BlueprintCallable)
+	TSubclassOf<ADice> GetDiceClass(EDiceType dType)
+	{
+		switch (dType)
+		{
+		case EDiceType::D6 :
+			return D6BP;
+		case EDiceType::D20 :
+			return D20BP;
+		}
+		return TSubclassOf<ADice>();
+	}
 };
