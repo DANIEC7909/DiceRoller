@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/GridPanel.h"
 #include "Components/VerticalBox.h"
 #include "UI/RecordWidget.h"
 #include "GameplayHud.generated.h"
@@ -24,7 +25,7 @@ private:
 	virtual void NativeDestruct() override;
 public:
 	UPROPERTY(EditAnywhere,meta=(BindWidgetOptional))
-	UVerticalBox* RecordsVBox;
+	UGridPanel*RecordsVBox;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<URecordWidget> RecordWidget;
 public:

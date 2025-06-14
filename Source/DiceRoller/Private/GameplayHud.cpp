@@ -6,7 +6,8 @@
 #include "DiceControllerPlayer.h"
 #include "DiceGameInstance.h"
 #include "DiceStatics.h"
-
+#include "Components/GridSlot.h"
+#include "Components/PanelWidget.h"
 void UGameplayHud::RoundEnded()
 {
 	mainOrder++;
@@ -30,6 +31,17 @@ void UGameplayHud::AddRecordOnTheTop(int32 order, int32 value)
 	URecordWidget* rWidg =CreateWidget<URecordWidget>(this,RecordWidget);
 	rWidg->Order->SetText(FText::FromString(FString::FromInt(order)));
 	rWidg->Value->SetText(FText::FromString(FString::FromInt(value)));
-	RecordsVBox->AddChildToVerticalBox(rWidg);
-	RecordsVBox->ShiftChild(0,rWidg);
+
+if (RecordsVBox->GetChildrenCount()>0)
+{
+	UGridSlot* gs =Cast<UGridSlot>(RecordsVBox->GetChildAt(0)->Slot);
+	gs->SetRow(gs->Row+1);//++;
+}
+	RecordsVBox->AddChildToGrid(rWidg,0);
+	
+	for (int32 i=2;i<RecordsVBox->GetChildrenCount();i++)
+	{
+	UGridSlot* gs =	Cast<UGridSlot>(RecordsVBox->GetChildAt(i)->Slot);
+		gs->SetRow(gs->Row+1);
+	}
 }
