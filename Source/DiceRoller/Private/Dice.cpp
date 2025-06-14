@@ -31,7 +31,7 @@ void ADice::PostInitializeComponents()
 		}
 	}
 }
-UE_DISABLE_OPTIMIZATION
+//UE_DISABLE_OPTIMIZATION
 int32 ADice::EvaluateScore()
 {
 	float dot = FLT_MAX;
@@ -61,7 +61,7 @@ int32 ADice::EvaluateScore()
 		}
 	return 0;
 }
-UE_ENABLE_OPTIMIZATION
+//UE_ENABLE_OPTIMIZATION
 ADice::ADice()
 {
 	GetStaticMeshComponent()->SetSimulatePhysics(true);
