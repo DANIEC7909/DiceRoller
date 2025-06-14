@@ -8,6 +8,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FApplyDiceDeck);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRoundEnded);
 
 UENUM(BlueprintType)
 enum class EDiceType:uint8
@@ -21,4 +22,5 @@ class DICEROLLER_API UDiceStatics : public UObject
 	GENERATED_BODY()
 public:
 	static FApplyDiceDeck OnApplyDiceDeck;
+	static FOnRoundEnded OnRoundEnded;
 };

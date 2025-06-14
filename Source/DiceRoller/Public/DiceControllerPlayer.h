@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Dice.h"
 #include "DiceStatics.h"
 #include "InputActionValue.h"
 #include "Camera/CameraComponent.h"
@@ -36,6 +37,7 @@ private:
 
 #pragma endregion
 public:
+	bool IsRoundStarted;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TArray<TSubclassOf<ADice>> DiceScheme;
 public:
@@ -47,10 +49,20 @@ protected:
 	UFUNCTION()
 	void DeckApplied();
 	virtual void BeginPlay() override;
-	
 	virtual void PostInitializeComponents() override;
 
 public:
+	UFUNCTION(BlueprintCallable)
+	int32 GetSumValue()
+	{
+		int32 sum = 0;
+		for (TWeakObjectPtr<ADice> dice : CurrentDices)
+		{
+			checkf(dice.IsValid(), TEXT("Dice is invalid. Error at %s"),TEXT(__FILE__));
+			sum+=dice->EvaluateScore();
+		}
+		return sum;
+	}
 	UFUNCTION(BlueprintCallable)
 	void AddDiceToScheme(EDiceType dType);
 	UFUNCTION(BlueprintCallable)

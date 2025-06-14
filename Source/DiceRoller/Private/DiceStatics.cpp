@@ -4,3 +4,4 @@
 #include "DiceStatics.h"
 
 	FApplyDiceDeck UDiceStatics::OnApplyDiceDeck;
+	FOnRoundEnded UDiceStatics::OnRoundEnded;

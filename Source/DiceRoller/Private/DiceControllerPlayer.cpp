@@ -22,6 +22,7 @@ void ADiceControllerPlayer::TriggerCurrentDices(const FInputActionValue& InputAc
 	{
 		dice->AddImpuls();
 	}
+IsRoundStarted=true;
 }
 
 void ADiceControllerPlayer::DeckApplied()
@@ -85,12 +86,14 @@ void ADiceControllerPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	this->AddActorWorldRotation(FRotator(0,DeltaTime*10,0));
+	int32 howMuchDiceSettled = 0;
 	for (TWeakObjectPtr<ADice> dice : CurrentDices)
 	{
 		if (dice.IsValid())
 		{
 			if (dice->IsDiceSettled())
 			{
+				howMuchDiceSettled++;
 				dice->EvaluateScore();
 				dice->PointWidgetTowardCamera(camComp->GetComponentLocation());
 			}
@@ -98,6 +101,14 @@ void ADiceControllerPlayer::Tick(float DeltaTime)
 			{
 				dice->HideDiceHUD();
 			}
+		}
+	}
+	if (howMuchDiceSettled == CurrentDices.Num())
+	{
+		if (IsRoundStarted)
+		{
+			UDiceStatics::OnRoundEnded.Broadcast();
+			IsRoundStarted = false;
 		}
 	}
 }

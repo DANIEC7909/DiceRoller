@@ -23,8 +23,10 @@ class DICEROLLER_API ADice : public AStaticMeshActor
 	TArray<TWeakObjectPtr<UDetectionPoint>> Components;
 	UPROPERTY(EditAnywhere)
 	UMyUserWidget* diceHUD;
-	static constexpr float DETECTION_TRESHOLD =0.90f;
-	static constexpr float SETTLE_TRESHOLD =0.4f;
+	UPROPERTY(EditAnywhere)
+	float DETECTION_TRESHOLD =0.90f;
+	UPROPERTY(EditAnywhere)
+	float SETTLE_TRESHOLD =0.4f;
 
 public:
 	void PointWidgetTowardCamera(FVector vec)

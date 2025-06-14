@@ -31,11 +31,12 @@ void ADice::PostInitializeComponents()
 		}
 	}
 }
+UE_DISABLE_OPTIMIZATION
 int32 ADice::EvaluateScore()
 {
 	float dot = FLT_MAX;
 	TWeakObjectPtr<UDetectionPoint> detPoint; 
-	for (TWeakObjectPtr<UDetectionPoint> dp : Components)
+	for (TWeakObjectPtr<UDetectionPoint>& dp : Components)
 	{
 		if (dp.IsValid())
 		{
@@ -46,7 +47,6 @@ int32 ADice::EvaluateScore()
 				dot = f;
 				detPoint = dp;
 			}
-		//	UE_LOGFMT(LogTemp,Display,"{0}<=|=>{1}",f,dp->GetValue());
 		}
 	}
 	if (IsValid(diceHUD) && detPoint.IsValid())
@@ -61,7 +61,7 @@ int32 ADice::EvaluateScore()
 		}
 	return 0;
 }
-
+UE_ENABLE_OPTIMIZATION
 ADice::ADice()
 {
 	GetStaticMeshComponent()->SetSimulatePhysics(true);
